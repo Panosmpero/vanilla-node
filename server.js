@@ -3,7 +3,8 @@ const {
   getProducts,
   getProduct,
   createProduct,
-  updateProduct
+  updateProduct,
+  deleteProduct
 } = require("./controllers/productsController");
 
 const server = http.createServer((req, res) => {
@@ -31,6 +32,12 @@ const server = http.createServer((req, res) => {
   ) {
     const id = req.url.split("/")[3];
     updateProduct(req, res, id);
+  } else if (
+    req.url.match(/\/api\/products\/\w+/) &&
+    req.method === "DELETE"
+  ) {
+    const id = req.url.split("/")[3];
+    deleteProduct(req, res, id);
   } else {
     console.log(req.url, req.method)
     res.writeHead(404, { "Content-Type": "application/json" });
