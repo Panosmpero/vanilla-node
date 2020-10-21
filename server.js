@@ -1,5 +1,10 @@
 const http = require("http");
-const { getProducts, getProduct, createProduct } = require("./controllers/productsController");
+const {
+  getProducts,
+  getProduct,
+  createProduct,
+  updateProduct
+} = require("./controllers/productsController");
 
 const server = http.createServer((req, res) => {
   // console.log("test")
@@ -11,13 +16,23 @@ const server = http.createServer((req, res) => {
   // specify conditionals on method and request url
   if (req.url === "/api/products" && req.method === "GET") {
     getProducts(req, res);
-  } else if (req.url.match(/\/api\/products\/([0-9]+)/) && req.method === "GET") {
+  } else if (
+    req.url.match(/\/api\/products\/([0-9]+)/) &&
+    req.method === "GET"
+  ) {
     // req.url.match instead of express' req.params.id
-    const id = req.url.split("/")[3]
-    getProduct(req, res, id)
+    const id = req.url.split("/")[3];
+    getProduct(req, res, id);
   } else if (req.url === "/api/products" && req.method === "POST") {
-    createProduct(req, res)
+    createProduct(req, res);
+  } else if (
+    req.url.match(/\/api\/products\/\w+/) &&
+    req.method === "PUT"
+  ) {
+    const id = req.url.split("/")[3];
+    updateProduct(req, res, id);
   } else {
+    console.log(req.url, req.method)
     res.writeHead(404, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ message: "Route not found." }));
   }

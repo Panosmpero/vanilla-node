@@ -23,8 +23,18 @@ function create(product) {
 
     // add then update the file
     products.push(newProduct);
-    writeDataToFile("./data/products.json", products)
+    writeDataToFile("./data/products.json", products);
     resolve(newProduct);
+  });
+}
+
+function update(id, product) {
+  return new Promise((resolve, reject) => {
+    const index = products.findIndex((prod) => prod.id === id);
+    products[index] = { id, ...product };
+
+    writeDataToFile("./data/products.json", products);
+    resolve(products[index]);
   });
 }
 
@@ -32,4 +42,5 @@ module.exports = {
   findAll,
   findById,
   create,
+  update,
 };
