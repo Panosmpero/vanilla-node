@@ -1,5 +1,5 @@
 const http = require("http");
-const { getProducts, getProduct } = require("./controllers/productsController");
+const { getProducts, getProduct, createProduct } = require("./controllers/productsController");
 
 const server = http.createServer((req, res) => {
   // console.log("test")
@@ -15,6 +15,8 @@ const server = http.createServer((req, res) => {
     // req.url.match instead of express' req.params.id
     const id = req.url.split("/")[3]
     getProduct(req, res, id)
+  } else if (req.url === "/api/products" && req.method === "POST") {
+    createProduct(req, res)
   } else {
     res.writeHead(404, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ message: "Route not found." }));
